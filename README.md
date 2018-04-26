@@ -1,4 +1,4 @@
-# Getting Started
+# Integrating the SDK
 
 1. Add the SDK to your project via CocoaPods by adding the following line to your Podfile. 
 ```
@@ -7,6 +7,9 @@ pod `VouchrSDK`
 Run a navigate to your project directory in Terminal and run: 
 ``pod install`` 
 Note: Your Xcode project must be opened using the .xcworkspace file, not the .xcodeproj file.
+
+
+# Setup
 
 2. Create a `VouchrEngine`
 ```objective-c
@@ -20,9 +23,6 @@ self.vouchrEngineSDK = [VouchrEngine vouchrEngineWithBuilder:^(VouchrEngineBuild
     }];
 ```
 
-# Create
-
-### Setup
 Instantiate a VoucherCreationManager:
 ```objective-c
 VoucherCreationManager *creationManager = [VoucherCreationManager voucherCreationManagerWithBuilder:^(VoucherCreationManagerBuilder *builder) {
