@@ -1,84 +1,72 @@
-# SDK-iOS-Documentation
-
 # Getting Started
 
-1. Add the SDK to your android project `build.gradle` file
-```groovy
-compile 'com.surpriise.libs:SurpriiseClaimSDK'
+1. Add the SDK to your project via CocoaPods by adding the following line to your Podfile. 
 ```
+pod `VouchrSDK`
+```
+Run a navigate to your project directory in Terminal and run: 
+``pod install`` 
+Note: Your Xcode project must be opened using the .xcworkspace file, not the .xcodeproj file.
 
 2. Create a `VouchrEngine`
-```java
-VouchrEngine.Builder engineBuilder = new VouchrEngine.Builder("server_base_url").setSdkId("SDK_ID");
-engineBuilder.build();
+```objective-c
+self.vouchrEngineSDK = [VouchrEngine vouchrEngineWithBuilder:^(VouchrEngineBuilder *builder) {
+        builder.cacheManager = [CacheManager new];
+        builder.networkManager = [NetworkManager new];
+        builder.persistManager = [[PersistManager alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
+        builder.userManager = [[UserManager alloc] initWithCacheManager:builder.cacheManager networkManager:builder.networkManager persistManager:builder.persistManager];
+        builder.voucherManager = [[VoucherManager alloc] initWithNetworkManager:builder.networkManager cacheManager:builder.cacheManager];
+        builder.wrappingPaperManager = [[WrappingPaperManager alloc] initWithNetworkManager:builder.networkManager];
+    }];
 ```
 
 # Create
 
 ### Setup
-
-In order to send Vouchrs you need to setup a create configuration.
-```java
-CreateConfiguration createConfiguration = new CreateConfiguration.Builder()
-    .setGiftItems(
-                  new TipPersonalizationOption(context),
-                  new TitlePersonalizationOption(),
-                  new ToPersonalizationOption(),
-                  new NotePersonalizationOption(),
-                  new WrappingPaperPersonalizationOption(),
-                  new GifPersonalizationOption(),
-                  new ImagePersonalizationOption(),
-                  new GiftCardPersonalizationOption(),
-                  new VideoPersonalizationOption(),
-                  new AudioPersonalizationOption())
-    )
-    .createConfig();
+Instantiate a VoucherCreationManager:
+```objective-c
+VoucherCreationManager *creationManager = [VoucherCreationManager voucherCreationManagerWithBuilder:^(VoucherCreationManagerBuilder *builder) {
+        builder.networkManager = [[VouchrEngine instance] networkManager];
+        builder.wrappingPaperManager = [[VouchrEngine instance] wrappingPaperManager];
+        builder.userManager = [[VouchrEngine instance] userManager];
+        builder.giftManager = [[VouchrEngine instance] giftManager];
+        builder.fullScreenLoadingView = [[SurpriiseLoadingView alloc] initWithFrame:CGRectZero];
+        builder.alwaysShowFullSummaryScreen = YES;
+    }];
 ```
-Then add it to your VouchrEngine
-
-```java
-engineBuilder.setCreateConfig(createConfiguration);
-engineBuilder.build();
+Instantiate a VoucherCreationFlowCoordinator:
+```objective-c
+self.voucherCreationFlowCoordinator = [VoucherCreationFlowCoordinator voucherCreationFlowCoordinatorWithManager:creationManager
+                                                                                                       themeManager:self.themeManager
+                                                                                                           delegate:self];
 ```
 
-### Customization of Personalization Options
-The Vouchr SDK comes with a robust set of `PersonalizationOptions` that can be customized and themed.
-The following options can be changed for each one:
-``` java
-new ImagePersonalizationOption()
-    .setImage(R.drawable.add_photo) // image that represent the option on the create screen
-    .setTitle(R.string.add_an_image_to_tour_gift) // text to represent the option on the create screen
-    .setTextColor(Color.WHITE); // color of the text on the create screen
-    .analyticsName("PhotoCustomizationOption") // name used in analytics events
-    .canAddMultiple(false); // determines if the user can add multiple or only one of this item in their Vouchr
+Instantiate PersonalizationOptions for all personalizations that will be available to the user.
+```objective-c
+NSMutableArray <PersonalizationOption *> *personalizationOptions = [NSMutableArray new];
+    [personalizationOptions addObject:[RecipientPersonalizationOption recipientPersonalizationOptionWithBuilder:^(RecipientPersonalizationOptionBuilder *builder) {
+        builder.themeManager = [self recipientThemeManager];
+        builder.canChangeUnwrapDate = YES;
+        builder.canMakeItARace = YES;
+        builder.canSendToEmail = YES;
+        builder.canSendToPhoneNumber = YES;
+    }]];
+    
+    [personalizationOptions addObject:[TitlePersonalizationOption titlePersonalizationOptionWithBuilder:^(TitlePersonalizationOptionBuilder *builder) {
+        builder.themeManager = [self recipientThemeManager];
+    }]];
+    
+    [personalizationOptions addObject:[PhotoPersonalizationOption photoPersonalizationOptionWithBuilder:^(PhotoPersonalizationOptionBuilder *builder) {
+        builder.themeManager = self.themeManager;
+        builder.canAddMultiple = NO;
+        builder.canUploadPhotos = NO;
+        builder.canAddGoogleImages = YES;
+        builder.canTakePhotos = YES;
+        builder.suggestedSearchTerms = @[@"one", @"two", @"three"];
+    }]];
 ```
 
-Additionally there are specific customizations for each of the built in PersonalizationItem
-```java
-new ImagePersonalizationOption()
-    .canUseCamera(true) // Can the user add photos from the camera
-    .canUseGallery(true) // Can the user add photos from there phone gallery
-    .canUseGoogleImages(true) // Can the user grab photos from Google
-    .allowUserCustomSearch(false) // Can the user input there own search terms within google
+Start the Voucher Creation flow:
+```objective-c
+[self.voucherCreationFlowCoordinator startFlowOnViewController:self.selectedViewController personalizationOptions:personalizationOptions];
 ```
-
-### New Personalization Items
-If you want to add your own custom `PersonaliztionOption`. All you have to do is extend `PersonalizationOption` and implement it's two abstract methods
-```java
-
-public void onItemClicked(View view, PendingVoucher pendingVoucher, LoadingBaseActivity activity, CreateUIUpdater UIUpdater) {
-    //  Called when the Personalization Option is clicked. 
-    //  Use this method to display customizations that the user can make to their Vouchr and call the UIUpdater if nesssary.
-}
-
-public void onItemRemoved(View view, PendingVoucher pendingVoucher, LoadingBaseActivity activity, CreateUIUpdater UIUpdater) {
-    //  Called when a user attempts to remove a personalization. 
-    //  Use this method to remove the option from the pendingVouchr and call UIUpdater if necessary.
-}
-
-```
-
-
-
-
-
