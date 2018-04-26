@@ -4,14 +4,15 @@
 ```
 pod `VouchrSDK`
 ```
-Run a navigate to your project directory in Terminal and run: 
+2. Run a navigate to your project directory in Terminal and run: 
 ``pod install`` 
+
 Note: Your Xcode project must be opened using the .xcworkspace file, not the .xcodeproj file.
 
 
 # Setup
 
-2. Create a `VouchrEngine`
+1. Create a `VouchrEngine`
 ```objective-c
 self.vouchrEngineSDK = [VouchrEngine vouchrEngineWithBuilder:^(VouchrEngineBuilder *builder) {
         builder.cacheManager = [CacheManager new];
@@ -23,7 +24,7 @@ self.vouchrEngineSDK = [VouchrEngine vouchrEngineWithBuilder:^(VouchrEngineBuild
     }];
 ```
 
-Instantiate a VoucherCreationManager:
+2. Instantiate a `VoucherCreationManager`:
 ```objective-c
 VoucherCreationManager *creationManager = [VoucherCreationManager voucherCreationManagerWithBuilder:^(VoucherCreationManagerBuilder *builder) {
         builder.networkManager = [[VouchrEngine instance] networkManager];
@@ -34,14 +35,14 @@ VoucherCreationManager *creationManager = [VoucherCreationManager voucherCreatio
         builder.alwaysShowFullSummaryScreen = YES;
     }];
 ```
-Instantiate a VoucherCreationFlowCoordinator:
+3. Instantiate a `VoucherCreationFlowCoordinator`:
 ```objective-c
 self.voucherCreationFlowCoordinator = [VoucherCreationFlowCoordinator voucherCreationFlowCoordinatorWithManager:creationManager
                                                                                                        themeManager:self.themeManager
                                                                                                            delegate:self];
 ```
 
-Instantiate PersonalizationOptions for all personalizations that will be available to the user.
+4. Instantiate `PersonalizationOption`s for all personalizations that will be available to the user.
 ```objective-c
 NSMutableArray <PersonalizationOption *> *personalizationOptions = [NSMutableArray new];
     [personalizationOptions addObject:[RecipientPersonalizationOption recipientPersonalizationOptionWithBuilder:^(RecipientPersonalizationOptionBuilder *builder) {
@@ -66,7 +67,7 @@ NSMutableArray <PersonalizationOption *> *personalizationOptions = [NSMutableArr
     }]];
 ```
 
-Start the Voucher Creation flow:
+5. Launch the Voucher Creation flow:
 ```objective-c
 [self.voucherCreationFlowCoordinator startFlowOnViewController:self.selectedViewController personalizationOptions:personalizationOptions];
 ```
