@@ -9,6 +9,10 @@ pod `VouchrSDK`
 
 Note: Your Xcode project must be opened using the .xcworkspace file, not the .xcodeproj file.
 
+3. Import the SDK
+```
+#import <VouchrSDK/VouchrSDK.h>
+```
 
 # Setup
 
