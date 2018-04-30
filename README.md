@@ -16,7 +16,7 @@ Note: Your Xcode project must be opened using the .xcworkspace file, not the .xc
 
 # Setup
 
-1. Create a `VouchrEngine`
+1. Instantiate a `VouchrEngine` with your preferred dependencies.
 ```objective-c
 self.vouchrEngineSDK = [VouchrEngine vouchrEngineWithBuilder:^(VouchrEngineBuilder *builder) {
         builder.cacheManager = [CacheManager new];
