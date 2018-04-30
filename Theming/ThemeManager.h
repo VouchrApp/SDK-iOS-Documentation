@@ -13,27 +13,65 @@
 
 @interface ThemeManager : NSObject <NSCopying>
 
-@property (nonatomic) FontTheme *primaryFontTheme;
-@property (nonatomic) FontTheme *secondaryFontTheme;
-@property (nonatomic) FontTheme *bodyFontTheme;
-
-// TODO: replace with:
-// navigationTitleFontTheme       - Font to be used in screen headers
-// displayFontTheme               - Largest, most emphasized font (see amount in gift amount screen)
-// h1FontTheme                    - Main header
-// h2FontTheme                    - Smaller header
-// bodyFontTheme                  - Used as main font for larger bodies of text
-// captionFontTheme               - Small, light font, fine print-esque (see timestamps in conversation)
+/**
+Font theme to be used for navigation bar titles
+*/
+@property (nonatomic) FontTheme *navigationTitleFontTheme;
 
 /**
- 
- */
+This font style is applied to elements which require much more size and emphasis than a header.
+This is typically used only for special cases (eg. amount display on gift card details screen).
+*/
+@property (nonatomic) FontTheme *displayFontTheme;
+
+/**
+Primary header font, majority of headers will use this theme.
+*/
+@property (nonatomic) FontTheme *mainHeaderFontTheme;
+
+/**
+Secondary header font, used in screens where a subheading is required, or a more subtle header.
+*/
+@property (nonatomic) FontTheme *subHeaderFontTheme;
+
+/**
+Font style used for paragraph text. 
+*/
+@property (nonatomic) FontTheme *bodyFontTheme;
+
+/**
+Font style used for more 'fine print' type of texts (eg. timestamps).
+*/
+@property (nonatomic) FontTheme *captionFontTheme;
+
+/**
+Color used for screen backgrounds.
+*/
 @property (nonatomic) UIColor *emptyBackgroundColor;
+
+/**
+Main brand color, used to accent screens.
+*/
 @property (nonatomic) UIColor *accentColor;
+
+/**
+Secondary brand color, used to accent screens.
+*/
 @property (nonatomic) UIColor *secondaryAccentColor;
 
+/**
+style applied to confirmation buttons such as: "next", "done".
+*/
 @property (nonatomic) ButtonTheme *positiveActionButtonTheme;
+
+/**
+Style applied to general buttons.
+*/
 @property (nonatomic) ButtonTheme *neutralActionButtonTheme;
+
+/**
+Style applied to cancellation buttons such as: "cancel", "dismiss".
+*/
 @property (nonatomic) ButtonTheme *negativeActionButtonTheme;
 
 @end
