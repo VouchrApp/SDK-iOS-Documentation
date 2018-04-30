@@ -13,6 +13,10 @@
 
 @interface ThemeManager : NSObject <NSCopying>
 
+ /************************************************************************
+ * * * * * * * * * * * * * * * * FONTS * * * * * * * * * * * * * * * * * *
+ ************************************************************************/
+  
 /**
 Font theme to be used for navigation bar titles
 */
@@ -44,6 +48,11 @@ Font style used for more 'fine print' type of texts (eg. timestamps).
 */
 @property (nonatomic) FontTheme *captionFontTheme;
 
+
+/************************************************************************
+ * * * * * * * * * * * * * * * COLORS * * * * * * * * * * * * * * * * * *
+************************************************************************/
+
 /**
 Color used for screen backgrounds.
 */
@@ -58,6 +67,11 @@ Main brand color, used to accent screens.
 Secondary brand color, used to accent screens.
 */
 @property (nonatomic) UIColor *secondaryAccentColor;
+
+
+/************************************************************************
+ * * * * * * * * * * * * * * * BUTTONS * * * * * * * * * * * * * * * * *
+************************************************************************/
 
 /**
 style applied to confirmation buttons such as: "next", "done".
